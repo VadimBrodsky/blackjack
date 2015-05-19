@@ -23,6 +23,22 @@ def say(message)
   puts "=> #{message}"
 end
 
+def print_card(card)
+  # +-------+  +-------+
+  # | 4     |  | 4     |
+  # |       |  |       |
+  # |   ♠   |  |   ♠   |
+  # |       |  |       |
+  # |       |  |       |
+  # +-------+  +-------+
+
+  horizontal_line = '+-------+'
+  card_line       = '| 4     |'
+  vertical_line   = '|       |'
+  suit_line       = '|   ♠   |'
+  card_spacer     = '  '
+end
+
 def print_hand_for(name = 'you', hand)
   if name == 'you'
     say('You hold in your hand:')
