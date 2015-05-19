@@ -21,7 +21,7 @@ def play_game
   dealer_hand = give_cards_from(game_deck, 2)
 
   print_hand_for('Player', player_hand)
-  # print_hand_for('Dealer', dealer_hand)
+  # print_first_card_for('Dealer', dealer_hand)
 
   player_choice = ask_hit_or_stay
 
@@ -36,7 +36,34 @@ def play_game
     end
   end
 
-  puts 'BUST!' if bust?(player_hand)
+  puts 'PLAYER BUST!' if bust?(player_hand)
+  puts '-----------'
+
+  print_hand_for('Dealer', dealer_hand)
+
+
+  if sum_of(dealer_hand) <= DEALER_MAXIMUM && !bust?(player_hand)
+    # binding.pry
+    loop do
+      dealer_hand = hit(dealer_hand, game_deck)
+      p dealer_hand
+      print_hand_for('Dealer', dealer_hand)
+      break if bust?(dealer_hand)
+      break if sum_of(dealer_hand) >= DEALER_MAXIMUM
+    end
+  end
+
+  puts 'DEALER BUST!' if bust?(dealer_hand)
+
+  if bust?(player_hand)
+    puts "Dealer Wins"
+  elsif bust?(dealer_hand)
+    puts "Player Wins"
+  elsif sum_of(player_hand) < sum_of(dealer_hand)
+    puts "Dealer Wins"
+  elsif sum_of(player_hand) > sum_of(dealer_hand)
+    puts "Dealer Wins"
+  end
 
   # binding.pry
 end

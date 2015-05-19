@@ -8,6 +8,7 @@ SUITS = { 'spades' => '♠', 'hearts' => '♥', 'diamonds' => '♦', 'clubs' => 
 DECK = CARDS.keys.product(SUITS.keys)
 BLACKJACK = 21
 ACE_LIMIT = 11
+DEALER_MAXIMUM = 17
 
 # BlackJack Methods
 def create_deck(deck)
