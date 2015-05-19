@@ -27,3 +27,18 @@ class GameTest < Minitest::Test
     assert_equal value_of(ace, 15), 1
   end
 end
+
+def test_hitting_should_remove_card_from_deck
+  full_deck = create_deck(DECK)
+  full_deck_count = full_deck.count
+  hit([], full_deck)
+  partial_deck_count = full_deck.count
+  refute_equal full_deck_count, partial_deck_count
+end
+
+def test_hand_should_bust
+  bust_hand = [%w(9 diamonds),  %w(8 hearts), %w(10 diamonds)]
+  good_hand = [%w(9 diamonds),  %w(8 hearts)]
+  assert bust?(bust_hand), true
+  refute bust?(good_hand), true
+end

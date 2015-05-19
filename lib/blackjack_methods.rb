@@ -31,6 +31,8 @@ def print_hand_for(name = 'you', hand)
   hand.each do |card|
     say("#{card[0].capitalize} of #{card[1].capitalize}")
   end
+  say("With the sum of #{sum_of(hand)}")
+  puts '-------------'
 end
 
 def value_of(card, sum)
@@ -45,4 +47,22 @@ def sum_of(hand)
   sum = 0
   hand.each { |card| sum += value_of(CARDS[card.first], sum) }
   sum
+end
+
+def ask_hit_or_stay
+  player_choice = nil
+  loop do
+    print 'Hit or Stay? (h/s): '
+    player_choice = gets.chomp.downcase
+    break if player_choice == 'h' || player_choice == 's'
+  end
+  player_choice
+end
+
+def hit(hand, deck)
+  hand << give_cards_from(deck, 1).first
+end
+
+def bust?(hand)
+  sum_of(hand) > BLACKJACK
 end
