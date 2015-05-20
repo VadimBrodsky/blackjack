@@ -6,9 +6,17 @@ CARDS = { '2' => 2, '3' => 3, '4' => 4, '5' => 5,
           'jack' => 10, 'queen' => 10, 'king' => 10, 'ace' => [1, 11] }
 SUITS = { 'spades' => '♠', 'hearts' => '♥', 'diamonds' => '♦', 'clubs' => '♣' }
 DECK = CARDS.keys.product(SUITS.keys)
+
+# Game Constants
 BLACKJACK = 21
 ACE_LIMIT = 11
 DEALER_MAXIMUM = 17
+
+# Card Drawing
+HORIZONTAL_LINE = '+-------+'
+VERTICAL_LINE   = '|       |'
+BACKFACE_LINE   = '|*******|'
+CARD_SPACER     = '  '
 
 # BlackJack Methods
 def create_deck(deck)
@@ -23,27 +31,47 @@ def say(message)
   puts "=> #{message}"
 end
 
-def print_card(card)
-  # +-------+  +-------+  +-------+
-  # | 4     |  | 4     |  |*******|
-  # |       |  |       |  |*******|
-  # |   ♠   |  |   ♠   |  |*******|
-  # |       |  |       |  |*******|
-  # |       |  |       |  |*******|
-  # +-------+  +-------+  +-------+
+def draw_backface_card
+  [HORIZONTAL_LINE, BACKFACE_LINE, BACKFACE_LINE, BACKFACE_LINE,
+   BACKFACE_LINE, BACKFACE_LINE, HORIZONTAL_LINE]
+end
 
-  horizontal_line = '+-------+'
-  card_line       = '| #     |'
-  vertical_line   = '|       |'
-  suit_line       = '|   X   |'
-  card_spacer     = '  '
+# Accepts input in the card format ["ace", "spades"]
+# Returns array
+def draw_card(card)
+  if card
+    number_line = "| #{card[0][0].upcase}     |"
+    suit_line   = "|   #{SUITS[card[1]]}   |"
+    [HORIZONTAL_LINE, number_line, VERTICAL_LINE, suit_line,
+     VERTICAL_LINE, VERTICAL_LINE, HORIZONTAL_LINE]
+   else
+     draw_backface_card
+   end
+end
 
-  card_art = [horizontal_line, card_line, vertical_line, suit_line, vertical_line, vertical_line, horizontal_line]
+# Accepts input in the hand format [["ace", "spades"], ["4", "hearts"]]
+# Returns 2D array
+def draw_hand(hand)
+  cards = []
+  hand.each { |card| cards << draw_card(card) }
+  cards
+end
 
-  card_art.each do |item|
-    puts ( item + card_spacer ) * 5
+# Accepts input in the hand format [["ace", "spades"], ["4", "hearts"]]
+def print_hand(hand)
+  drawing = draw_hand(hand)
+  number_of_cards = drawing.length
+  number_of_card_segments = drawing.first.length
+
+  number_of_card_segments.times do |card_segment|
+    number_of_cards.times do |index|
+      print drawing[index][card_segment]
+      print CARD_SPACER
+    end
+    print "\n"
   end
 end
+
 
 def print_hand_for(name = 'you', hand)
   if name == 'you'
