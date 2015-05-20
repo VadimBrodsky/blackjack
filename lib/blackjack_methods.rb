@@ -31,6 +31,10 @@ def say(message)
   puts "=> #{message}"
 end
 
+def line_break
+  puts ""
+end
+
 def draw_backface_card
   [HORIZONTAL_LINE, BACKFACE_LINE, BACKFACE_LINE, BACKFACE_LINE,
    BACKFACE_LINE, BACKFACE_LINE, HORIZONTAL_LINE]
@@ -40,6 +44,7 @@ end
 # Returns array
 def draw_card(card)
   if card
+    # Not accoutned for #10 takes 2 spaces
     number_line = "| #{card[0][0].upcase}     |"
     suit_line   = "|   #{SUITS[card[1]]}   |"
     [HORIZONTAL_LINE, number_line, VERTICAL_LINE, suit_line,
@@ -58,7 +63,7 @@ def draw_hand(hand)
 end
 
 # Accepts input in the hand format [["ace", "spades"], ["4", "hearts"]]
-def print_hand(hand)
+def print_hand_as_cards(hand)
   drawing = draw_hand(hand)
   number_of_cards = drawing.length
   number_of_card_segments = drawing.first.length
@@ -72,18 +77,13 @@ def print_hand(hand)
   end
 end
 
-
-def print_hand_for(name = 'you', hand)
-  if name == 'you'
-    say('You hold in your hand:')
-  else
-    say("#{name} holds:")
+def print_hand_for(name, hand)
+  message = "#{name} holds: "
+  hand.each_with_index do |card, index|
+    message += "#{card[0].capitalize} of #{card[1].capitalize}"
+    message += ', ' unless index == hand.length - 1
   end
-  hand.each do |card|
-    say("#{card[0].capitalize} of #{card[1].capitalize}")
-  end
-  say("With the sum of #{sum_of(hand)}")
-  puts '-------------'
+  say(message)
 end
 
 def value_of(card, sum)

@@ -14,22 +14,33 @@ require_relative 'lib/blackjack_methods'
 # Compare sums to find out winner
 
 def play_game
-  puts 'Welcome to BlackJack!'
-
   game_deck   = create_deck(DECK)
   player_hand = give_cards_from(game_deck, 2)
   dealer_hand = give_cards_from(game_deck, 2)
 
+  system('clear')
+  puts "Welcome to BlackJack!\n\n"
+
+  puts '------ DEALER ------'
+  print_hand_as_cards([dealer_hand[0], false])
+  line_break
+
+  puts '------ PLAYER ------'
+  print_hand_as_cards(player_hand)
+
+  line_break
   print_hand_for('Player', player_hand)
-  # print_first_card_for('Dealer', dealer_hand)
+  say("Sum of: #{sum_of(player_hand)}")
+  line_break
 
   player_choice = ask_hit_or_stay
 
   if player_choice == 'h'
     loop do
       player_hand = hit(player_hand, game_deck)
-      p player_hand
+      # p player_hand
       print_hand_for('Player', player_hand)
+      say("Sum of: #{sum_of(player_hand)}")
       break if bust?(player_hand)
       player_choice = ask_hit_or_stay
       break if player_choice == 's'
@@ -37,7 +48,7 @@ def play_game
   end
 
   puts 'PLAYER BUST!' if bust?(player_hand)
-  puts '-----------'
+  puts "\n-----------stay-----------\n\n"
 
   print_hand_for('Dealer', dealer_hand)
 
@@ -46,8 +57,9 @@ def play_game
     # binding.pry
     loop do
       dealer_hand = hit(dealer_hand, game_deck)
-      p dealer_hand
+      # p dealer_hand
       print_hand_for('Dealer', dealer_hand)
+      say("Sum of: #{sum_of(dealer_hand)}")
       break if bust?(dealer_hand)
       break if sum_of(dealer_hand) >= DEALER_MAXIMUM
     end
@@ -68,5 +80,10 @@ def play_game
   # binding.pry
 end
 
-# play_game
-print_card('')
+play_game
+
+# game_deck   = create_deck(DECK)
+# player_hand = give_cards_from(game_deck, 2)
+# dealer_hand = give_cards_from(game_deck, 2)
+#
+# print_hand(player_hand)
