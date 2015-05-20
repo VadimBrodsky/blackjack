@@ -24,19 +24,25 @@ def say(message)
 end
 
 def print_card(card)
-  # +-------+  +-------+
-  # | 4     |  | 4     |
-  # |       |  |       |
-  # |   ♠   |  |   ♠   |
-  # |       |  |       |
-  # |       |  |       |
-  # +-------+  +-------+
+  # +-------+  +-------+  +-------+
+  # | 4     |  | 4     |  |*******|
+  # |       |  |       |  |*******|
+  # |   ♠   |  |   ♠   |  |*******|
+  # |       |  |       |  |*******|
+  # |       |  |       |  |*******|
+  # +-------+  +-------+  +-------+
 
   horizontal_line = '+-------+'
-  card_line       = '| 4     |'
+  card_line       = '| #     |'
   vertical_line   = '|       |'
-  suit_line       = '|   ♠   |'
+  suit_line       = '|   X   |'
   card_spacer     = '  '
+
+  card_art = [horizontal_line, card_line, vertical_line, suit_line, vertical_line, vertical_line, horizontal_line]
+
+  card_art.each do |item|
+    puts ( item + card_spacer ) * 5
+  end
 end
 
 def print_hand_for(name = 'you', hand)

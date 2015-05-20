@@ -68,4 +68,5 @@ def play_game
   # binding.pry
 end
 
-play_game
+# play_game
+print_card('')
