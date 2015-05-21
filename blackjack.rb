@@ -17,30 +17,15 @@ def play_game
   game_deck   = create_deck(DECK)
   player_hand = give_cards_from(game_deck, 2)
   dealer_hand = give_cards_from(game_deck, 2)
+  player_name = 'Player'
 
-  system('clear')
-  puts "Welcome to BlackJack!\n\n"
-
-  puts '------ DEALER ------'
-  print_hand_as_cards([dealer_hand[0], false])
-  line_break
-
-  puts '------ PLAYER ------'
-  print_hand_as_cards(player_hand)
-
-  line_break
-  print_hand_for('Player', player_hand)
-  say("Sum of: #{sum_of(player_hand)}")
-  line_break
-
+  print_game_state([dealer_hand[0], false], player_hand, player_name)
   player_choice = ask_hit_or_stay
 
   if player_choice == 'h'
     loop do
       player_hand = hit(player_hand, game_deck)
-      # p player_hand
-      print_hand_for('Player', player_hand)
-      say("Sum of: #{sum_of(player_hand)}")
+      print_game_state([dealer_hand[0], false], player_hand, player_name)
       break if bust?(player_hand)
       player_choice = ask_hit_or_stay
       break if player_choice == 's'

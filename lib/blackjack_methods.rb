@@ -44,8 +44,8 @@ end
 # Returns array
 def draw_card(card)
   if card
-    # Not accoutned for #10 takes 2 spaces
-    number_line = "| #{card[0][0].upcase}     |"
+    number_line = card[0] == '10' ? "| #{card[0]}    |" :
+    "| #{card[0][0].upcase}     |"
     suit_line   = "|   #{SUITS[card[1]]}   |"
     [HORIZONTAL_LINE, number_line, VERTICAL_LINE, suit_line,
      VERTICAL_LINE, VERTICAL_LINE, HORIZONTAL_LINE]
@@ -84,6 +84,20 @@ def print_hand_for(name, hand)
     message += ', ' unless index == hand.length - 1
   end
   say(message)
+end
+
+def print_game_state(dealer_hand, player_hand, player_name, message='Welcome to BlackJack!')
+  system('clear')
+  puts "#{message}\n\n"
+  puts '------ DEALER ------'
+  print_hand_as_cards(dealer_hand)
+  line_break
+  puts "------ #{player_name} ------"
+  print_hand_as_cards(player_hand)
+  line_break
+  print_hand_for(player_name, player_hand)
+  say("Sum of: #{sum_of(player_hand)}")
+  line_break
 end
 
 def value_of(card, sum)
