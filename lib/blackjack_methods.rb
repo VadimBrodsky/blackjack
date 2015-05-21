@@ -47,7 +47,7 @@ def draw_card(card)
     number_line = if card[0] == '10'
                     "| #{card[0]}    |"
                   else
-                    "| #{card[0]}    |"
+                    "| #{card[0][0].upcase}     |"
                   end
     suit_line   = "|   #{SUITS[card[1]]}   |"
     [HORIZONTAL_LINE, number_line, VERTICAL_LINE, suit_line,
@@ -97,7 +97,7 @@ def print_game_state(dealer_hand, player_hand, player_name,
   puts '------ DEALER ------'
   print_hand_as_cards(dealer_hand)
   line_break
-  puts "------ #{player_name} ------"
+  puts "------ #{player_name.upcase} ------"
   print_hand_as_cards(player_hand)
   line_break
   print_hand_for(player_name, player_hand)
