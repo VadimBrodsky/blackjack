@@ -32,7 +32,7 @@ def say(message)
 end
 
 def line_break
-  puts ""
+  puts ''
 end
 
 def draw_backface_card
@@ -44,14 +44,17 @@ end
 # Returns array
 def draw_card(card)
   if card
-    number_line = card[0] == '10' ? "| #{card[0]}    |" :
-    "| #{card[0][0].upcase}     |"
+    number_line = if card[0] == '10'
+                    "| #{card[0]}    |"
+                  else
+                    "| #{card[0]}    |"
+                  end
     suit_line   = "|   #{SUITS[card[1]]}   |"
     [HORIZONTAL_LINE, number_line, VERTICAL_LINE, suit_line,
      VERTICAL_LINE, VERTICAL_LINE, HORIZONTAL_LINE]
-   else
-     draw_backface_card
-   end
+  else
+    draw_backface_card
+  end
 end
 
 # Accepts input in the hand format [["ace", "spades"], ["4", "hearts"]]
@@ -83,10 +86,12 @@ def print_hand_for(name, hand)
     message += "#{card[0].capitalize} of #{card[1].capitalize}"
     message += ', ' unless index == hand.length - 1
   end
+  # p hand
   say(message)
 end
 
-def print_game_state(dealer_hand, player_hand, player_name, message='Welcome to BlackJack!')
+def print_game_state(dealer_hand, player_hand, player_name,
+  message = 'Welcome to BlackJack!')
   system('clear')
   puts "#{message}\n\n"
   puts '------ DEALER ------'
@@ -132,13 +137,13 @@ def bust?(hand)
   sum_of(hand) > BLACKJACK
 end
 
-def name_of_winner(player_hand, dealer_hand, name='Player')
+def name_of_winner(player_hand, dealer_hand, name = 'Player')
   if bust?(dealer_hand)
     name
   elsif bust?(player_hand)
-    "Dealer"
+    'Dealer'
   elsif sum_of(player_hand) < sum_of(dealer_hand)
-    "Dealer"
+    'Dealer'
   elsif sum_of(player_hand) > sum_of(dealer_hand)
     name
   elsif sum_of(player_hand) == sum_of(dealer_hand)
@@ -150,7 +155,7 @@ def print_winner(name)
   if name
     puts "#{name} wins!"
   else
-    puts "It's a tie!"
+    puts 'It\'s a tie!'
   end
 end
 
