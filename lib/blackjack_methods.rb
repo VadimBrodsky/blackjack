@@ -131,3 +131,35 @@ end
 def bust?(hand)
   sum_of(hand) > BLACKJACK
 end
+
+def name_of_winner(player_hand, dealer_hand, name='Player')
+  if bust?(dealer_hand)
+    name
+  elsif bust?(player_hand)
+    "Dealer"
+  elsif sum_of(player_hand) < sum_of(dealer_hand)
+    "Dealer"
+  elsif sum_of(player_hand) > sum_of(dealer_hand)
+    name
+  elsif sum_of(player_hand) == sum_of(dealer_hand)
+    false
+  end
+end
+
+def print_winner(name)
+  if name
+    puts "#{name} wins!"
+  else
+    puts "It's a tie!"
+  end
+end
+
+def ask_play_again
+  player_choice = nil
+  loop do
+    print 'Play Again? (y/n): '
+    player_choice = gets.chomp.downcase
+    break if player_choice == 'y' || player_choice == 'n'
+  end
+  player_choice
+end

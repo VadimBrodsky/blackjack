@@ -22,6 +22,7 @@ def play_game
   print_game_state([dealer_hand[0], false], player_hand, player_name)
   player_choice = ask_hit_or_stay
 
+  # player draws
   if player_choice == 'h'
     loop do
       player_hand = hit(player_hand, game_deck)
@@ -32,43 +33,31 @@ def play_game
     end
   end
 
-  puts 'PLAYER BUST!' if bust?(player_hand)
-  puts "\n-----------stay-----------\n\n"
-
-  print_hand_for('Dealer', dealer_hand)
-
-
-  if sum_of(dealer_hand) <= DEALER_MAXIMUM && !bust?(player_hand)
-    # binding.pry
-    loop do
-      dealer_hand = hit(dealer_hand, game_deck)
-      # p dealer_hand
-      print_hand_for('Dealer', dealer_hand)
-      say("Sum of: #{sum_of(dealer_hand)}")
-      break if bust?(dealer_hand)
-      break if sum_of(dealer_hand) >= DEALER_MAXIMUM
-    end
-  end
-
-  puts 'DEALER BUST!' if bust?(dealer_hand)
-
   if bust?(player_hand)
-    puts "Dealer Wins"
-  elsif bust?(dealer_hand)
-    puts "Player Wins"
-  elsif sum_of(player_hand) < sum_of(dealer_hand)
-    puts "Dealer Wins"
-  elsif sum_of(player_hand) > sum_of(dealer_hand)
-    puts "Dealer Wins"
+    print_game_state(dealer_hand, player_hand, player_name)
+    puts("#{player_name} is bust!")
+    line_break
+  else
+    print_game_state(dealer_hand, player_hand, player_name, 'Dealer Draws')
+    if sum_of(dealer_hand) <= DEALER_MAXIMUM
+      loop do
+        dealer_hand = hit(dealer_hand, game_deck)
+        print_game_state(dealer_hand, player_hand, player_name, 'Dealer Draws')
+        print_hand_for('Dealer', dealer_hand)
+        say("Sum of: #{sum_of(dealer_hand)}")
+        line_break
+        break if bust?(dealer_hand)
+        break if sum_of(dealer_hand) >= DEALER_MAXIMUM
+      end
+    end
+    puts "Dealer BUST!\n\n" if bust?(dealer_hand)
   end
 
-  # binding.pry
+  winner = name_of_winner(player_hand, dealer_hand, player_name)
+  print_winner(winner)
+
+  line_break
+  play_game if ask_play_again == 'y'
 end
 
 play_game
-
-# game_deck   = create_deck(DECK)
-# player_hand = give_cards_from(game_deck, 2)
-# dealer_hand = give_cards_from(game_deck, 2)
-#
-# print_hand(player_hand)
