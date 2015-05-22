@@ -44,11 +44,8 @@ end
 # Returns array
 def draw_card(card)
   if card
-    number_line = if card[0] == '10'
-                    "| #{card[0]}    |"
-                  else
-                    "| #{card[0][0].upcase}     |"
-                  end
+    card_number = card[0] == '10' ? card[0] : card[0][0].upcase + ' '
+    number_line = "| #{card_number}    |"
     suit_line   = "|   #{SUITS[card[1]]}   |"
     [HORIZONTAL_LINE, number_line, VERTICAL_LINE, suit_line,
      VERTICAL_LINE, VERTICAL_LINE, HORIZONTAL_LINE]
@@ -91,18 +88,15 @@ def print_hand_for(name, hand)
 end
 
 def print_game_state(dealer_hand, player_hand, player_name,
-  message = 'Welcome to BlackJack!')
+  message = "Welcome to BlackJack #{player_name}!")
   system('clear')
-  puts "#{message}\n\n"
-  puts '------ DEALER ------'
+  puts "#{message}\n\n------ DEALER ------"
   print_hand_as_cards(dealer_hand)
-  line_break
-  puts "------ #{player_name.upcase} ------"
+  puts "\n------ #{player_name.upcase} ------"
   print_hand_as_cards(player_hand)
   line_break
   print_hand_for(player_name, player_hand)
-  say("Sum of: #{sum_of(player_hand)}")
-  line_break
+  say("Sum of: #{sum_of(player_hand)}\n\n")
 end
 
 def value_of(card, sum)
@@ -127,6 +121,11 @@ def ask_hit_or_stay
     break if player_choice == 'h' || player_choice == 's'
   end
   player_choice
+end
+
+def ask_player_name
+  print 'What is your name? '
+  gets.chomp.downcase.capitalize
 end
 
 def hit(hand, deck)

@@ -13,11 +13,12 @@ require_relative 'lib/blackjack_methods'
 # If cards less than 17 dealer hits until over 17 or bust
 # Compare sums to find out winner
 
-def play_game
+def play_game(player_name = false)
   game_deck   = create_deck(DECK)
   player_hand = give_cards_from(game_deck, 2)
   dealer_hand = give_cards_from(game_deck, 2)
-  player_name = 'Player'
+
+  player_name = ask_player_name unless player_name
 
   print_game_state([dealer_hand[0], false], player_hand, player_name)
   player_choice = ask_hit_or_stay
@@ -57,7 +58,7 @@ def play_game
   print_winner(winner)
 
   line_break
-  play_game if ask_play_again == 'y'
+  play_game(player_name) if ask_play_again == 'y'
 end
 
 play_game
