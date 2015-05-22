@@ -2,7 +2,7 @@
 
 Created for an assignment as part of the Intro to Ruby course on [Tealeaf Academy](https://www.gotealeaf.com/lessons/f4d7b093/assignments/1653). This version uses procedural Ruby code.
 
-<img src="https://raw.github.com/VadimBrodsky/blackjack/master/demo.gif" width="400" />
+<img src="https://raw.github.com/VadimBrodsky/blackjack/master/demo.gif" width="500" />
 
 
 ## Rules & Requirements:
@@ -20,7 +20,7 @@ By rule, the dealer must hit until she has at least 17. If the dealer busts, the
 4. Use methods to extract the piece of functionality that calculates the total, since we need it throughout the program.
 
 ## Bonus:
-1. Save the player's name, and use it throughout the app.
-2. 2. Ask the player if he wants to play again, rather than just exiting.
-3. 3. Save not just the card value, but also the suit.
-4. 4. Use multiple decks to prevent against card counting players.
+1. [x] Save the player's name, and use it throughout the app.
+2. [x] Ask the player if he wants to play again, rather than just exiting.
+3. [x] Save not just the card value, but also the suit.
+4. [x] Use multiple decks to prevent against card counting players.
