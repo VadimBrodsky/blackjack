@@ -1,6 +1,5 @@
 # BlackJack
 
-require 'pry'
 require_relative 'lib/blackjack_methods'
 
 # Create Deck

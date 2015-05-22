@@ -11,6 +11,7 @@ class GameTest < Minitest::Test
     @large_hand = [%w(9 diamonds), %w(10 diamonds)]
     @small_ace_hand = [%w(10 diamonds), %w(5 hearts), %w(ace spades)]
     @large_ace_hand = [%w(3 diamonds), %w(5 hearts), %w(ace spades)]
+    @triple_aces_hand = [%w(ace spades), %w(ace hearts), %w(ace clubs)]
   end
 
   def test_two_decks_should_be_different
@@ -50,6 +51,7 @@ class GameTest < Minitest::Test
     assert_equal sum_of(@large_hand), 19
     assert_equal sum_of(@large_ace_hand), 19
     assert_equal sum_of(@small_ace_hand), 16
+    assert_equal sum_of(@triple_aces_hand), 13
   end
 
   def test_correct_winner
