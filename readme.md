@@ -1,6 +1,6 @@
 # Command Line BlackJack Game in Ruby
 
-Created for an assignment as part of the Intro to Ruby course on [Tealeaf Academy](https://www.gotealeaf.com/lessons/f4d7b093/assignments/1653). This version uses procedural Ruby code.
+Created for an assignment as part of the Intro to Ruby course on [Tealeaf Academy](https://www.gotealeaf.com/). This version uses procedural Ruby code.
 
 <img src="https://raw.github.com/VadimBrodsky/blackjack/master/demo.gif" width="500" />
 
