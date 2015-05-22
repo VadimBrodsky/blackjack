@@ -4,6 +4,12 @@ Created for an assignment as part of the Intro to Ruby course on [Tealeaf Academ
 
 <img src="https://raw.github.com/VadimBrodsky/blackjack/master/demo.gif" width="500" />
 
+# To Do
+- [ ] Natural BlackJack when Ace + Face cards appear.
+- [ ] Better tie rules, more cards?
+- [ ] Dealer needs to open cards when player is bust.
+- [ ] Splits / Double Down
+
 
 ## Rules & Requirements:
 
