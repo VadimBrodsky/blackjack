@@ -9,3 +9,10 @@
 # Dealer opens cards
 # If cards less than 17 dealer hits until over 17 or bust
 # Compare sums to find out winner
+
+require 'pry'
+require_relative 'lib/blackjack_classes'
+
+player = Player.new ("Vadim")
+p player
+# binding.pry
