@@ -1,4 +1,4 @@
-# Command Line BlackJack Game in Ruby
+# Command Line BlackJack Game in Ruby - OO Version
 
 Created for an assignment as part of the Intro to Ruby course on [Tealeaf Academy](https://www.gotealeaf.com/). This version uses procedural Ruby code.
 
