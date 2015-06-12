@@ -12,3 +12,8 @@ class Player
     self.name = name
   end
 end
+
+
+class Card
+
+end
