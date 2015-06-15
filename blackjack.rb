@@ -11,8 +11,17 @@
 # Compare sums to find out winner
 
 require 'pry'
+def e
+  exit!
+end
+
+
 require_relative 'lib/blackjack_classes'
 
 player = Player.new ("Vadim")
 p player
-# binding.pry
+
+
+d = Deck.new
+
+binding.pry
