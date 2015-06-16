@@ -27,6 +27,10 @@ class Card
     @suit = suit if SUITS.include?(suit)
   end
 
+  def value
+    FACES[face]
+  end
+
   def self.all_cards
     FACES.keys.product(SUITS.keys)
   end
@@ -55,10 +59,40 @@ class Hand
 
   def initialize
     @cards = []
+    @value = 0
   end
-
 
   def hit(card)
     @cards << card
   end
+
+  def value
+    if have_aces?
+      value_with_aces
+    else
+      value_without_aces
+    end
+  end
+
+  def count_aces
+    cards.select{|c| c.face == 'ace'}.length
+  end
+
+  def have_aces?
+    count_aces > 0
+  end
+
+  def value_without_aces
+    cards.select{|c| c.face != 'ace' }.map{|c| c.value }.reduce(:+)
+  end
+
+  def value_with_aces
+    val = value_without_aces
+    val ||= 0
+    aces = count_aces
+    aces.times { val += val >= 11 ? 1 : 11 }
+    val
+  end
+
+
 end
