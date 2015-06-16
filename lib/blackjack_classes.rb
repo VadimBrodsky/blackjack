@@ -6,11 +6,22 @@
 #  - Game
 
 class Player
-  attr_accessor :name
+  attr_accessor :name, :hand
 
   def initialize(name)
     self.name = name
+    self.hand = Hand.new
   end
+
+  def print_hand
+    puts "#{name} hold:"
+    hand.each{|c| puts " #{c}"}
+  end
+end
+
+
+class Dealer < Player
+  DEALER_LIMIT = 17
 end
 
 
@@ -34,6 +45,10 @@ class Card
   def self.all_cards
     FACES.keys.product(SUITS.keys)
   end
+
+  def to_s
+    "#{SUITS[suit]}#{face.chr.capitalize }"
+  end
 end
 
 
@@ -49,7 +64,15 @@ class Deck
   end
 
   def draw_card
-    @cards.delete(cards.first)
+    @cards.shift(1).first
+  end
+
+  def draw_cards(num = 1)
+    @cards.shift(num)
+  end
+
+  def num_in_deck
+    cards.count
   end
 end
 
@@ -64,6 +87,10 @@ class Hand
 
   def hit(card)
     @cards << card
+  end
+
+  def num_in_hand
+    cards.count
   end
 
   def value
@@ -93,6 +120,38 @@ class Hand
     aces.times { val += val >= 11 ? 1 : 11 }
     val
   end
+end
 
 
+class Blackjack
+  attr_reader :deck
+
+  def initialize
+    puts 'Welcome to BlackJack'
+    @deck = Deck.new
+    @player = Player.new(ask_for_name)
+    @dealer = Dealer.new('Dealer')
+    play_game
+  end
+
+  def ask_for_name
+    print 'What is your name? '
+    gets.chomp.capitalize
+  end
+
+  def play_game
+    deal_cards
+  end
+
+  def deal_cards
+    2.times do
+      @player.hand.hit(@deck.draw_card)
+      @dealer.hand.hit(@deck.draw_card)
+    end
+    print_game_state
+  end
+
+  def print_game_state
+
+  end
 end

@@ -29,11 +29,10 @@ end
 
 require_relative 'lib/blackjack_classes'
 
-player = Player.new ("Vadim")
-p player
-
 
 d = Deck.new
 h = Hand.new
+
+game = Blackjack.new
 
 binding.pry

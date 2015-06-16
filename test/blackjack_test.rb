@@ -37,14 +37,22 @@ class GameTest < Minitest::Test
   end
 
   def test_withdraw_card_from_deck
-    card = @d1.draw_card
-    assert_equal @d1.cards.include?(card), false
+    num_of_cards = @d1.num_in_deck
+    @d1.draw_card
+    assert_equal @d1.num_in_deck, num_of_cards - 1
+  end
+
+  def test_withdraw_multiple_cards
+    num_of_cards = @d1.num_in_deck
+    cards_out = @d1.draw_cards(3)
+    assert_equal cards_out.length, 3
+    assert_equal @d1.num_in_deck, num_of_cards - 3
   end
 
   def test_hit_a_hand
-    cards_in_hand = @h1.cards.length
+    cards_in_hand = @h1.num_in_hand
     @h1.hit(@d1.draw_card)
-    assert_equal @h1.cards.length, cards_in_hand + 1
+    assert_equal @h1.num_in_hand, cards_in_hand + 1
   end
 
   def test_hand_value
