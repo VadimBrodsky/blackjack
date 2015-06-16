@@ -34,13 +34,31 @@ end
 
 
 class Deck
-  attr_reader :deck
+  attr_reader :cards
 
   def initialize
-    @deck = Card.all_cards.shuffle.map {|card| Card.new(card[0], card[1])}
+    @cards = Card.all_cards.shuffle.map {|card| Card.new(card[0], card[1])}
   end
 
   def to_a
-    deck.map {|c| [c.face, c.suit]}
+    cards.map {|c| [c.face, c.suit]}
+  end
+
+  def draw_card
+    @cards.delete(cards.first)
+  end
+end
+
+
+class Hand
+  attr_reader :cards
+
+  def initialize
+    @cards = []
+  end
+
+
+  def hit(card)
+    @cards << card
   end
 end
