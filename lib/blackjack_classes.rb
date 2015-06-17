@@ -7,21 +7,58 @@
 
 class Player
   attr_accessor :name, :hand
+  attr_reader :status
+  RENDER_DELAY = 0.3
 
   def initialize(name)
     self.name = name
     self.hand = Hand.new
+    @status = 'Playing'
+  end
+
+  def delay
+    sleep RENDER_DELAY
   end
 
   def print_hand
-    puts "#{name} hold:"
-    hand.each{|c| puts " #{c}"}
+    puts "\n#{name} holds:"
+    hand.cards.each{|c| delay; puts " #{c}"}
+    delay
+    puts "TOTAL: #{hand.value}"
+  end
+
+  def update_status
+    @status = 'Bust' if hand.bust?
+    @status = 'Winner' if hand.blackjack?
   end
 end
 
 
 class Dealer < Player
   DEALER_LIMIT = 17
+
+  def print_hand
+    if hand.num_in_hand < 3
+      hide_one_card
+    else
+      print_all_cards
+    end
+  end
+
+  def hide_one_card
+    puts "\n#{name} holds:"
+    delay
+    puts " #{hand.cards.first}"
+    delay
+    puts ' XX'
+  end
+
+  def print_all_cards
+    puts "\n#{name} holds:"
+    hand.cards.each{|c| delay; puts " #{c}"}
+    delay
+    puts "TOTAL: #{hand.value}\n\n"
+  end
 end
 
 
@@ -47,7 +84,11 @@ class Card
   end
 
   def to_s
-    "#{SUITS[suit]}#{face.chr.capitalize }"
+    if face == '10'
+      "#{SUITS[suit]}#{face[0..1].capitalize }"
+    else
+      "#{SUITS[suit]}#{face.chr.capitalize }"
+    end
   end
 end
 
@@ -82,7 +123,6 @@ class Hand
 
   def initialize
     @cards = []
-    @value = 0
   end
 
   def hit(card)
@@ -120,18 +160,33 @@ class Hand
     aces.times { val += val >= 11 ? 1 : 11 }
     val
   end
+
+  def bust?
+    value > Blackjack::BLACKJACK
+  end
+
+  def blackjack?
+    value == Blackjack::BLACKJACK
+  end
 end
 
 
 class Blackjack
   attr_reader :deck
 
+  BLACKJACK = 21
+
   def initialize
-    puts 'Welcome to BlackJack'
+    print_welcome_message
     @deck = Deck.new
     @player = Player.new(ask_for_name)
     @dealer = Dealer.new('Dealer')
     play_game
+  end
+
+  def print_welcome_message
+    system 'clear'
+    puts 'Welcome to BlackJack!'
   end
 
   def ask_for_name
@@ -141,17 +196,59 @@ class Blackjack
 
   def play_game
     deal_cards
+    player_loop
+    dealer_loop
   end
 
   def deal_cards
     2.times do
-      @player.hand.hit(@deck.draw_card)
-      @dealer.hand.hit(@deck.draw_card)
+      player_hit
+      dealer_hit
     end
     print_game_state
   end
 
-  def print_game_state
+  def player_hit
+    @player.hand.hit(@deck.draw_card)
+    @player.update_status
+  end
 
+  def dealer_hit
+    @dealer.hand.hit(@deck.draw_card)
+    @dealer.update_status
+  end
+
+  def print_game_state
+    system 'clear'
+    @player.print_hand
+    @dealer.print_hand
+  end
+
+  def ask_hit_or_stay
+    player_choice = nil
+    loop do
+      print "\nHit or Stay? (h/s): "
+      player_choice = gets.chomp.downcase
+      break if player_choice == 'h' || player_choice == 's'
+    end
+    player_choice
+  end
+
+  def player_loop
+    loop do
+      if ask_hit_or_stay == 'h'
+        player_hit
+        print_game_state
+        break if @player.status != 'Playing'
+      else
+        break
+      end
+    end
+  end
+
+  def dealer_loop
+    system 'clear'
+    @player.print_hand
+    @dealer.print_all_cards
   end
 end

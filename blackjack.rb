@@ -35,4 +35,5 @@ h = Hand.new
 
 game = Blackjack.new
 
-binding.pry
+
+# binding.pry
