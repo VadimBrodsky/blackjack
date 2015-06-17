@@ -25,6 +25,7 @@ class Player
     hand.cards.each{|c| delay; puts " #{c}"}
     delay
     puts "TOTAL: #{hand.value}"
+    sleep RENDER_DELAY * 2
   end
 
   def update_status
@@ -57,7 +58,13 @@ class Dealer < Player
     puts "\n#{name} holds:"
     hand.cards.each{|c| delay; puts " #{c}"}
     delay
-    puts "TOTAL: #{hand.value}\n\n"
+    puts "TOTAL: #{hand.value}\n"
+    sleep RENDER_DELAY * 2
+  end
+
+  def update_status
+    super
+    @status = 'Stand' if hand.value >= DEALER_LIMIT
   end
 end
 
@@ -219,7 +226,6 @@ class Blackjack
   end
 
   def print_game_state
-    system 'clear'
     @player.print_hand
     @dealer.print_hand
   end
@@ -237,8 +243,7 @@ class Blackjack
   def player_loop
     loop do
       if ask_hit_or_stay == 'h'
-        player_hit
-        print_game_state
+        player_hit_verbose
         break if @player.status != 'Playing'
       else
         break
@@ -246,9 +251,30 @@ class Blackjack
     end
   end
 
-  def dealer_loop
-    system 'clear'
+  def player_hit_verbose
+    puts "\n=> Player Draws a Card:"
+    player_hit
     @player.print_hand
+  end
+
+  def dealer_hit_verbose
+    puts "\n=> Dealer Draws a Card:"
+    dealer_hit
+    @dealer.print_all_cards
+  end
+
+  def dealer_loop
+    dealer_open_hand
+    loop do
+      if @dealer.hand.value <= Dealer::DEALER_LIMIT
+        dealer_hit_verbose
+      end
+      break if @dealer.status != 'Playing'
+    end
+  end
+
+  def dealer_open_hand
+    puts "\n=> Dealer Opens Hand:"
     @dealer.print_all_cards
   end
 end
