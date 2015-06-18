@@ -1,3 +1,4 @@
+# coding: utf-8
 # Nouns:
 #  - Player (human / delaer)
 #  - Hand
@@ -6,8 +7,7 @@
 #  - Game
 
 class Player
-  attr_accessor :name, :hand
-  attr_reader :status
+  attr_accessor :name, :hand, :status
   RENDER_DELAY = 0.3
 
   def initialize(name)
@@ -29,8 +29,8 @@ class Player
   end
 
   def update_status
-    @status = 'Bust' if hand.bust?
-    @status = 'Winner' if hand.blackjack?
+    @status = 'bust' if hand.bust?
+    @status = 'winner' if hand.blackjack?
   end
 end
 
@@ -64,7 +64,7 @@ class Dealer < Player
 
   def update_status
     super
-    @status = 'Stand' if hand.value >= DEALER_LIMIT
+    @status = 'stand' if hand.value >= DEALER_LIMIT
   end
 end
 
@@ -204,7 +204,13 @@ class Blackjack
   def play_game
     deal_cards
     player_loop
-    dealer_loop
+    if @player.status == 'playing'
+      dealer_loop
+    else
+      dealer_open_hand
+    end
+    compare_hands
+    print_winner
   end
 
   def deal_cards
@@ -276,5 +282,32 @@ class Blackjack
   def dealer_open_hand
     puts "\n=> Dealer Opens Hand:"
     @dealer.print_all_cards
+  end
+
+  def compare_hands
+    if @player.status = 'bust'
+      @dealer.status = 'winner'
+    elsif @dealer.status = 'bust'
+      @player.status = 'winner'
+    elsif @player.hand.value > @dealer.hand.value
+      @player.status = 'winner'
+      @dealer.status = 'loser'
+    elsif @player.hand.value < @dealer.hand.value
+      @dealer.status = 'winner'
+      @player.status = 'loser'
+    elsif @player.hand.value == @dealer.hand.value
+      @dealer.status = 'draw'
+      @player.status = 'draw'
+    end
+  end
+
+  def print_winner
+    if @player.status == 'winner'
+      puts "=>#{@player.name} Won!"
+    elsif @dealer.status == 'winner'
+      puts "=>#{@dealer.name} Won!"
+    elsif
+      puts "=>It's a draw"
+    end
   end
 end
