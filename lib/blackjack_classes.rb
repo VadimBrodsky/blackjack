@@ -225,9 +225,21 @@ class Blackjack
     @player.update_status
   end
 
+  def player_hit_verbose
+    puts "\n=> Player Draws a Card:"
+    player_hit
+    @player.print_hand
+  end
+
   def dealer_hit
     @dealer.hand.hit(@deck.draw_card)
     @dealer.update_status
+  end
+
+  def dealer_hit_verbose
+    puts "\n=> Dealer Draws a Card:"
+    dealer_hit
+    @dealer.print_all_cards
   end
 
   def print_game_state
@@ -256,18 +268,6 @@ class Blackjack
     end
   end
 
-  def player_hit_verbose
-    puts "\n=> Player Draws a Card:"
-    player_hit
-    @player.print_hand
-  end
-
-  def dealer_hit_verbose
-    puts "\n=> Dealer Draws a Card:"
-    dealer_hit
-    @dealer.print_all_cards
-  end
-
   def dealer_loop
     dealer_open_hand
     loop do
@@ -284,6 +284,7 @@ class Blackjack
   end
 
   def compare_hands
+    # FIX ME
     if @player.status = 'bust'
       @dealer.status = 'winner'
     elsif @dealer.status = 'bust'
@@ -301,6 +302,7 @@ class Blackjack
   end
 
   def print_winner
+    # FIX ME
     if @player.status == 'winner'
       puts "=>#{@player.name} Won!"
     elsif @dealer.status == 'winner'
