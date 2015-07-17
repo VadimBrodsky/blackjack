@@ -7,6 +7,7 @@ class GameTest < Minitest::Test
     @d1 = Deck.new
     @d2 = Deck.new
     @h1 = Hand.new
+    @d = Dealer.new('Dealer')
   end
 
   def test_number_of_cards
@@ -131,5 +132,19 @@ class GameTest < Minitest::Test
     assert_equal h.bust?, false
     h.hit( Card.new('8', 'diamonds') )
     assert_equal h.bust?, true
+  end
+
+  def test_player_status
+    p = Player.new('Player')
+    assert_equal p.status, :playing
+
+    p.hand.hit( Card.new('queen', 'hearts') )
+    p.hand.hit( Card.new('king', 'spades') )
+    p.update_status
+    assert_equal p.status, :playing
+
+    p.hand.hit( Card.new('5', 'clubs') )
+    p.update_status
+    assert_equal p.status, :bust
   end
 end
