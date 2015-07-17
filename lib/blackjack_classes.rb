@@ -12,7 +12,7 @@ class Player
   def initialize(name)
     self.name = name
     self.hand = Hand.new
-    @status = 'Playing'
+    @status = 'playing'
   end
 
   def delay
@@ -187,6 +187,7 @@ class Blackjack
     @deck = Deck.new
     @player = Player.new(ask_for_name)
     @dealer = Dealer.new('Dealer')
+    @game = {winner: false}
     play_game
   end
 
@@ -203,48 +204,42 @@ class Blackjack
   def play_game
     deal_cards
     player_loop
-    if @player.status == 'playing'
-      dealer_loop
-    else
-      dealer_open_hand
-    end
-    compare_hands
-    print_winner
+    dealer_loop
+    determine_winner
   end
 
   def deal_cards
     2.times do
-      player_hit
-      dealer_hit
+      player_hit(@player)
+      player_hit(@dealer)
     end
     print_game_state
   end
 
-  def player_hit
-    @player.hand.hit(@deck.draw_card)
-    @player.update_status
+  def player_hit(player)
+    player.hand.hit(@deck.draw_card)
+    player.update_status
   end
 
-  def player_hit_verbose
-    puts "\n=> Player Draws a Card:"
-    player_hit
-    @player.print_hand
-  end
-
-  def dealer_hit
-    @dealer.hand.hit(@deck.draw_card)
-    @dealer.update_status
-  end
-
-  def dealer_hit_verbose
-    puts "\n=> Dealer Draws a Card:"
-    dealer_hit
-    @dealer.print_all_cards
+  def player_hit_verbose(player)
+    puts "\n=> #{player.name} Draws a Card:"
+    player_hit(player)
+    player.print_hand
   end
 
   def print_game_state
     @player.print_hand
     @dealer.print_hand
+  end
+
+  def player_loop
+    while @player.status == 'playing' do
+      if ask_hit_or_stay == 'h'
+        player_hit_verbose(@player)
+      else
+        break
+      end
+    end
   end
 
   def ask_hit_or_stay
@@ -257,24 +252,13 @@ class Blackjack
     player_choice
   end
 
-  def player_loop
-    loop do
-      if ask_hit_or_stay == 'h'
-        player_hit_verbose
-        break if @player.status != 'Playing'
-      else
-        break
-      end
-    end
-  end
-
   def dealer_loop
     dealer_open_hand
-    loop do
+    while @dealer.status == 'playing' && @player.status == 'playing' do
       if @dealer.hand.value <= Dealer::DEALER_LIMIT
-        dealer_hit_verbose
+        player_hit_verbose(@dealer)
       end
-      break if @dealer.status != 'Playing'
+      break if @dealer.status != 'playing'
     end
   end
 
@@ -283,32 +267,11 @@ class Blackjack
     @dealer.print_all_cards
   end
 
-  def compare_hands
-    # FIX ME
-    if @player.status = 'bust'
-      @dealer.status = 'winner'
-    elsif @dealer.status = 'bust'
-      @player.status = 'winner'
-    elsif @player.hand.value > @dealer.hand.value
-      @player.status = 'winner'
-      @dealer.status = 'loser'
-    elsif @player.hand.value < @dealer.hand.value
-      @dealer.status = 'winner'
-      @player.status = 'loser'
-    elsif @player.hand.value == @dealer.hand.value
-      @dealer.status = 'draw'
-      @player.status = 'draw'
-    end
+  def print_winner(player)
+    puts "#{player.name} won!"
   end
 
-  def print_winner
-    # FIX ME
-    if @player.status == 'winner'
-      puts "=>#{@player.name} Won!"
-    elsif @dealer.status == 'winner'
-      puts "=>#{@dealer.name} Won!"
-    elsif
-      puts "=>It's a draw"
-    end
+  def determine_winner
+
   end
 end
