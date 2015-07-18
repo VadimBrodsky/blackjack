@@ -187,7 +187,6 @@ class Blackjack
     @deck = Deck.new
     @player = Player.new(ask_for_name)
     @dealer = Dealer.new('Dealer')
-    @game = {winner: false}
     play_game
   end
 
@@ -202,10 +201,14 @@ class Blackjack
   end
 
   def play_game
-    deal_cards
-    player_loop
-    dealer_loop
-    determine_winner
+    loop do
+      deal_cards
+      player_loop
+      dealer_loop
+      determine_winner
+      reset_game
+      break if ask_play_or_quit == 'q'
+    end
   end
 
   def deal_cards
@@ -252,6 +255,16 @@ class Blackjack
     player_choice
   end
 
+  def ask_play_or_quit
+    player_choice = nil
+    loop do
+      print "\nPlay or Quit? (p/q): "
+      player_choice = gets.chomp.downcase
+      break if player_choice == 'p' || player_choice == 'q'
+    end
+    player_choice
+  end
+
   def dealer_loop
     dealer_open_hand
 
@@ -278,11 +291,13 @@ class Blackjack
   end
 
   def determine_winner
-    puts "Player: #{@player.status}"
-    puts "Dealer: #{@dealer.status}"
+    # puts "Player: #{@player.status}"
+    # puts "Dealer: #{@dealer.status}"
 
     players = [@player, @dealer]
     players.delete_if {|p| p.status == :bust }
+
+    puts ""
 
     if players.length == 0
       puts "All busted, no winner :("
@@ -296,6 +311,12 @@ class Blackjack
         print_winner(players.last)
       end
     end
+  end
+
+  def reset_game
+    @deck = Deck.new
+    @player = Player.new(@player.name)
+    @dealer = Dealer.new(@dealer.name)
   end
 
 end
