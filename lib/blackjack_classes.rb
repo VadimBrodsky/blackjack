@@ -12,7 +12,7 @@ class Player
   def initialize(name)
     self.name = name
     self.hand = Hand.new
-    @status = :playing
+    self.status = :playing
   end
 
   def delay
@@ -28,8 +28,8 @@ class Player
   end
 
   def update_status
-    @status = :bust if hand.bust?
-    @status = :blackjack if hand.blackjack?
+    self.status = :bust if hand.bust?
+    self.status = :blackjack if hand.blackjack?
   end
 end
 
@@ -63,7 +63,7 @@ class Dealer < Player
 
   def update_status
     super
-    @status = :stand if hand.value >= DEALER_LIMIT && hand.value < Blackjack::BLACKJACK
+    self.status = :stand if hand.value >= DEALER_LIMIT && hand.value < Blackjack::BLACKJACK
   end
 end
 
@@ -256,11 +256,15 @@ class Blackjack
     dealer_open_hand
 
     if @player.status != :stand && @dealer.status == :playing
-      @delaer.status = :stand
+      @dealer.status = :stand
     end
 
     while @dealer.status == :playing do
-      player_hit_verbose(@dealer)
+       if @dealer.hand.value > @player.hand.value
+         @dealer.status = :stand
+       else
+        player_hit_verbose(@dealer)
+      end
     end
   end
 
@@ -276,19 +280,22 @@ class Blackjack
   def determine_winner
     puts "Player: #{@player.status}"
     puts "Dealer: #{@dealer.status}"
-    p "#{@player.hand.value <=> @dealer.hand.value}"
 
-    if @player.status == :stand && @dealer.status == :stand
-      case @player.hand.value <=> @dealer.hand.value
-      when 0
+    players = [@player, @dealer]
+    players.delete_if {|p| p.status == :bust }
+
+    if players.length == 0
+      puts "All busted, no winner :("
+    elsif players.length == 1
+      print_winner(players.first)
+    else
+      players.sort! {|p1,p2| p1.hand.value <=> p2.hand.value }
+      if players.first.hand.value == players.last.hand.value
         puts "It's a tie!"
-      when 1
-        print_winner(@player)
-      when -1
-        print_winner(@dealer)
+      else
+        print_winner(players.last)
       end
     end
-
-
   end
+
 end
