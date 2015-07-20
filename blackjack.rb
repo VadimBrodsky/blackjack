@@ -22,18 +22,10 @@
 # If it's a draw, player gets bet back
 
 require 'pry'
-def e
-  exit!
-end
-
+# def e
+#   exit!
+# end
 
 require_relative 'lib/blackjack_classes'
 
-
-d = Deck.new
-h = Hand.new
-
 game = Blackjack.new
-
-
-# binding.pry
