@@ -21,7 +21,7 @@ class Player
 
   def print_hand
     puts "\n#{name} holds:"
-    hand.cards.each{|c| delay; puts " #{c}"}
+    hand.cards.each { |c| delay; puts " #{c}" }
     delay
     puts "TOTAL: #{hand.value}"
     sleep RENDER_DELAY * 2
@@ -32,7 +32,6 @@ class Player
     self.status = :blackjack if hand.blackjack?
   end
 end
-
 
 class Dealer < Player
   DEALER_LIMIT = 17
@@ -55,7 +54,7 @@ class Dealer < Player
 
   def print_all_cards
     puts "\n#{name} holds:"
-    hand.cards.each{|c| delay; puts " #{c}"}
+    hand.cards.each{ |c| delay; puts " #{c}" }
     delay
     puts "TOTAL: #{hand.value}\n"
     sleep RENDER_DELAY * 2

@@ -28,4 +28,4 @@ require 'pry'
 
 require_relative 'lib/blackjack_classes'
 
-game = Blackjack.new
+Blackjack.new
