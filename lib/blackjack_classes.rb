@@ -235,7 +235,7 @@ class Blackjack
   end
 
   def player_loop
-    while @player.status == :playing do
+    while @player.status == :playing
       if ask_hit_or_stay == 'h'
         player_hit_verbose(@player)
       else
@@ -271,10 +271,10 @@ class Blackjack
       @dealer.status = :stand
     end
 
-    while @dealer.status == :playing do
-       if @dealer.hand.value > @player.hand.value
-         @dealer.status = :stand
-       else
+    while @dealer.status == :playing
+      if @dealer.hand.value > @player.hand.value
+        @dealer.status = :stand
+      else
         player_hit_verbose(@dealer)
       end
     end
@@ -294,16 +294,16 @@ class Blackjack
     # puts "Dealer: #{@dealer.status}"
 
     players = [@player, @dealer]
-    players.delete_if {|p| p.status == :bust }
+    players.delete_if { |p| p.status == :bust }
 
-    puts ""
+    puts ''
 
     if players.length == 0
-      puts "All busted, no winner :("
+      puts 'All busted, no winner :('
     elsif players.length == 1
       print_winner(players.first)
     else
-      players.sort! {|p1,p2| p1.hand.value <=> p2.hand.value }
+      players.sort! { |p1, p2| p1.hand.value <=> p2.hand.value }
       if players.first.hand.value == players.last.hand.value
         puts "It's a tie!"
       else
@@ -317,5 +317,4 @@ class Blackjack
     @player = Player.new(@player.name)
     @dealer = Dealer.new(@dealer.name)
   end
-
 end

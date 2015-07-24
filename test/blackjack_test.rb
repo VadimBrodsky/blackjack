@@ -100,37 +100,37 @@ class GameTest < Minitest::Test
 
   def test_two_aces
     h = Hand.new
-    h.hit( Card.new('ace', 'spades') )
-    h.hit( Card.new('ace', 'hearts') )
+    h.hit(Card.new('ace', 'spades'))
+    h.hit(Card.new('ace', 'hearts'))
     assert_equal h.value, 12
   end
 
   def test_three_aces
     h = Hand.new
-    h.hit( Card.new('ace', 'spades') )
-    h.hit( Card.new('ace', 'hearts') )
-    h.hit( Card.new('ace', 'clubs') )
+    h.hit(Card.new('ace', 'spades'))
+    h.hit(Card.new('ace', 'hearts'))
+    h.hit(Card.new('ace', 'clubs'))
     assert_equal h.value, 13
   end
 
   def test_hand_blackjack
     h = Hand.new
-    h.hit( Card.new('ace', 'spades') )
+    h.hit(Card.new('ace', 'spades'))
     assert_equal h.blackjack?, false    # low
-    h.hit( Card.new('king', 'hearts') )
+    h.hit(Card.new('king', 'hearts'))
     assert_equal h.blackjack?, true    # true
-    h.hit( Card.new('2', 'clubs') )
+    h.hit(Card.new('2', 'clubs'))
     assert_equal h.blackjack?, false   # high
   end
 
   def test_hand_should_bust
     h = Hand.new
-    h.hit( Card.new('queen', 'hearts') )
+    h.hit(Card.new('queen', 'hearts'))
     assert_equal h.bust?, false
-    h.hit( Card.new('8', 'spades') )
-    h.hit( Card.new('3', 'spades') )
+    h.hit(Card.new('8', 'spades'))
+    h.hit(Card.new('3', 'spades'))
     assert_equal h.bust?, false
-    h.hit( Card.new('8', 'diamonds') )
+    h.hit(Card.new('8', 'diamonds'))
     assert_equal h.bust?, true
   end
 
@@ -138,12 +138,12 @@ class GameTest < Minitest::Test
     p = Player.new('Player')
     assert_equal p.status, :playing
 
-    p.hand.hit( Card.new('queen', 'hearts') )
-    p.hand.hit( Card.new('king', 'spades') )
+    p.hand.hit(Card.new('queen', 'hearts'))
+    p.hand.hit(Card.new('king', 'spades'))
     p.update_status
     assert_equal p.status, :playing
 
-    p.hand.hit( Card.new('5', 'clubs') )
+    p.hand.hit(Card.new('5', 'clubs'))
     p.update_status
     assert_equal p.status, :bust
   end
