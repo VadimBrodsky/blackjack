@@ -58,43 +58,43 @@ class GameTest < Minitest::Test
 
   def test_hand_value
     h = Hand.new
-    h.hit( Card.new('7', 'spades') )
+    h.hit(Card.new('7', 'spades'))
     assert_equal h.value, 7
-    h.hit( Card.new('jack', 'clubs') )
+    h.hit(Card.new('jack', 'clubs'))
     assert_equal h.value, 17
-    h.hit( Card.new('4', 'diamond') )
+    h.hit(Card.new('4', 'diamond'))
     assert_equal h.value, 21
   end
 
   def test_first_ace
     h = Hand.new
-    h.hit( Card.new('ace', 'hearts') )
+    h.hit(Card.new('ace', 'hearts'))
     assert_equal h.value, 11
   end
 
   def test_ace_is_11
     h = Hand.new
-    h.hit( Card.new('4', 'clubs') )
-    h.hit( Card.new('ace', 'spades'))
+    h.hit(Card.new('4', 'clubs'))
+    h.hit(Card.new('ace', 'spades'))
     assert_equal h.value, 15
   end
 
   def test_ace_is_1
     h = Hand.new
-    h.hit( Card.new('8', 'clubs') )
-    h.hit( Card.new('king', 'clubs') )
-    h.hit( Card.new('ace', 'spades'))
+    h.hit(Card.new('8', 'clubs'))
+    h.hit(Card.new('king', 'clubs'))
+    h.hit(Card.new('ace', 'spades'))
     assert_equal h.value, 19
   end
 
   def test_ace_switch
     h = Hand.new
-    h.hit( Card.new('3', 'diamonds') )
-    h.hit( Card.new('ace', 'spades') )
+    h.hit(Card.new('3', 'diamonds'))
+    h.hit(Card.new('ace', 'spades'))
     assert_equal h.value, 14
-    h.hit( Card.new('9', 'clubs'))
+    h.hit(Card.new('9', 'clubs'))
     assert_equal h.value, 13
-    h.hit( Card.new('ace', 'hearts') )
+    h.hit(Card.new('ace', 'hearts'))
     assert_equal h.value, 14
   end
 

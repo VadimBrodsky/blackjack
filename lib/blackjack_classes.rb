@@ -54,7 +54,7 @@ class Dealer < Player
 
   def print_all_cards
     puts "\n#{name} holds:"
-    hand.cards.each{ |c| delay; puts " #{c}" }
+    hand.cards.each { |c| delay; puts " #{c}" }
     delay
     puts "TOTAL: #{hand.value}\n"
     sleep RENDER_DELAY * 2
@@ -66,12 +66,12 @@ class Dealer < Player
   end
 end
 
-
 class Card
-  FACES = { '2' => 2, '3' => 3, '4' => 4, '5' => 5,
-          '6' => 6, '7' => 7, '8' => 8, '9' => 9, '10' => 10,
-          'jack' => 10, 'queen' => 10, 'king' => 10, 'ace' => [1, 11] }
-  SUITS = { 'spades' => '♠', 'hearts' => '♥', 'diamonds' => '♦', 'clubs' => '♣' }
+  FACES = { '2' => 2, '3' => 3, '4' => 4, '5' => 5, '6' => 6, '7' => 7,
+            '8' => 8, '9' => 9, '10' => 10, 'jack' => 10, 'queen' => 10,
+            'king' => 10, 'ace' => [1, 11] }
+  SUITS = { 'spades' => '♠', 'hearts' => '♥', 'diamonds' => '♦',
+            'clubs' => '♣' }
 
   attr_reader :face, :suit
 
@@ -97,16 +97,15 @@ class Card
   end
 end
 
-
 class Deck
   attr_reader :cards
 
   def initialize
-    @cards = Card.all_cards.shuffle.map {|card| Card.new(card[0], card[1])}
+    @cards = Card.all_cards.shuffle.map { |card| Card.new(card[0], card[1]) }
   end
 
   def to_a
-    cards.map {|c| [c.face, c.suit]}
+    cards.map { |c| [c.face, c.suit] }
   end
 
   def draw_card
@@ -121,7 +120,6 @@ class Deck
     cards.count
   end
 end
-
 
 class Hand
   attr_reader :cards
@@ -139,7 +137,7 @@ class Hand
   end
 
   def value
-    if have_aces?
+    if aces?
       value_with_aces
     else
       value_without_aces
@@ -147,15 +145,15 @@ class Hand
   end
 
   def count_aces
-    cards.select{|c| c.face == 'ace'}.length
+    cards.count { |c| c.face == 'ace' }
   end
 
-  def have_aces?
+  def aces?
     count_aces > 0
   end
 
   def value_without_aces
-    cards.select{|c| c.face != 'ace' }.map{|c| c.value }.reduce(:+)
+    cards.select { |c| c.face != 'ace' }.map(&:value).reduce(:+)
   end
 
   def value_with_aces
@@ -174,7 +172,6 @@ class Hand
     value == Blackjack::BLACKJACK
   end
 end
-
 
 class Blackjack
   attr_reader :deck
