@@ -31,6 +31,10 @@ class Player
     self.status = :bust if hand.bust?
     self.status = :blackjack if hand.blackjack?
   end
+
+  def <=>(other)
+    hand.value <=> other.hand.value
+  end
 end
 
 class Dealer < Player
@@ -201,7 +205,7 @@ class Blackjack
       deal_cards
       player_loop
       dealer_loop
-      determine_winner
+      determine_winner([@player, @dealer])
       reset_game
       break if ask_play_or_quit == 'q'
     end
@@ -286,26 +290,56 @@ class Blackjack
     puts "#{player.name} won!"
   end
 
-  def determine_winner
-    # puts "Player: #{@player.status}"
-    # puts "Dealer: #{@dealer.status}"
+  def all_busted?(players)
+    players.length == 0
+  end
 
-    players = [@player, @dealer]
+  def one_player_left?(players)
+    players.length == 1
+  end
+
+  def remove_busted_players(players)
     players.delete_if { |p| p.status == :bust }
+  end
 
+  def highest_value(players)
+    players.max.hand.value
+  end
+
+  def top_players(players)
+    value = highest_value(players)
+    players.select { |p| p.hand.value == value }
+  end
+
+  def top_players_tied?(players)
+    top_players(players).length > 1
+  end
+
+  def tie_breaker(players)
+    top = top_players(players)
+    top_max = top.max { |p1, p2| p1.hand.num_in_hand <=> p2.hand.num_in_hand }
+    top.delete_if { |p| p.hand.value < top_max.hand.value }
+
+    if top.length == 1
+      print_winnter(top.first)
+    else
+      puts "It's a tie!"
+    end
+  end
+
+  def determine_winner(players)
+    players.sort!
+    remove_busted_players(players)
     puts ''
 
-    if players.length == 0
+    if all_busted?(players)
       puts 'All busted, no winner :('
-    elsif players.length == 1
-      print_winner(players.first)
+    elsif one_player_left?(players)
+      print_winner(players.last)
+    elsif top_players_tied?(players)
+      tie_breaker(players)
     else
-      players.sort! { |p1, p2| p1.hand.value <=> p2.hand.value }
-      if players.first.hand.value == players.last.hand.value
-        puts "It's a tie!"
-      else
-        print_winner(players.last)
-      end
+      print_winner(players.last)
     end
   end
 

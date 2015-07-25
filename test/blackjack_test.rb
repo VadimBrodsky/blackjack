@@ -7,6 +7,7 @@ class GameTest < Minitest::Test
     @d1 = Deck.new
     @d2 = Deck.new
     @h1 = Hand.new
+    @p = Player.new('Test Player')
     @d = Dealer.new('Dealer')
   end
 
