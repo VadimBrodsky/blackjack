@@ -2,12 +2,10 @@
 
 Created for an assignment as part of the Intro to Ruby course on [Tealeaf Academy](https://www.gotealeaf.com/). This version uses procedural Ruby code.
 
-<img src="https://raw.github.com/VadimBrodsky/blackjack/master/demo.gif" width="500" />
-
 # To Do
-- [ ] Natural BlackJack when Ace + Face cards appear.
-- [ ] Better tie rules, more cards?
-- [ ] Dealer needs to open cards when player is bust.
+- [X] Natural BlackJack when Ace + Face cards appear.
+- [X] Better tie rules, more cards?
+- [X] Dealer needs to open cards when player is bust.
 - [ ] Splits / Double Down
 
 
