@@ -21,7 +21,7 @@
 # Dealer must stand on 17, draw until then
 # If it's a draw, player gets bet back
 
-require 'pry'
+# require 'pry'
 # def e
 #   exit!
 # end

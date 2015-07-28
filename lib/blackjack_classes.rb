@@ -15,6 +15,19 @@ class Player
     self.status = :playing
   end
 
+  def num_of_cards
+    hand.num_in_hand
+  end
+
+  def hit(card)
+    hand.hit(card)
+    update_status
+  end
+
+  def value
+    hand.value
+  end
+
   def delay
     sleep RENDER_DELAY
   end
@@ -209,24 +222,20 @@ class Blackjack
       reset_game
       break if ask_play_or_quit == 'q'
     end
+    puts 'Bye.'
   end
 
   def deal_cards
     2.times do
-      player_hit(@player)
-      player_hit(@dealer)
+      @player.hit(@deck.draw_card)
+      @dealer.hit(@deck.draw_card)
     end
     print_game_state
   end
 
-  def player_hit(player)
-    player.hand.hit(@deck.draw_card)
-    player.update_status
-  end
-
   def player_hit_verbose(player)
     puts "\n=> #{player.name} Draws a Card:"
-    player_hit(player)
+    player.hit(@deck.draw_card)
     player.print_hand
   end
 
@@ -287,7 +296,7 @@ class Blackjack
   end
 
   def print_winner(player)
-    puts "#{player.name} won!"
+    puts "\n=> #{player.name} won!"
   end
 
   def all_busted?(players)
@@ -298,48 +307,44 @@ class Blackjack
     players.length == 1
   end
 
-  def remove_busted_players(players)
+  def self.remove_busted_players!(players)
     players.delete_if { |p| p.status == :bust }
   end
 
-  def highest_value(players)
-    players.max.hand.value
+  def self.highest_value(players)
+    players.max.value
   end
 
-  def top_players(players)
-    value = highest_value(players)
-    players.select { |p| p.hand.value == value }
+  def self.top_players(players)
+    value = Blackjack.highest_value(players)
+    players.select { |p| p.value == value }
   end
 
   def top_players_tied?(players)
-    top_players(players).length > 1
+    Blackjack.top_players(players).length > 1
   end
 
-  def tie_breaker(players)
-    top = top_players(players)
-    top_max = top.max { |p1, p2| p1.hand.num_in_hand <=> p2.hand.num_in_hand }
-    top.delete_if { |p| p.hand.value < top_max.hand.value }
-
-    if top.length == 1
-      print_winnter(top.first)
-    else
-      puts "It's a tie!"
-    end
+  def self.tie_breaker(players)
+    tied_players = Blackjack.top_players(players)
+    higest_num_cards = tied_players.max { |p1, p2| p1.num_of_cards <=> p2.num_of_cards }.num_of_cards
+    tied_players.delete_if { |p| p.num_of_cards < higest_num_cards }
+    tied_players.length == 1 ? tied_players.first : nil
   end
 
   def determine_winner(players)
     players.sort!
-    remove_busted_players(players)
-    puts ''
+    Blackjack.remove_busted_players!(players)
 
     if all_busted?(players)
-      puts 'All busted, no winner :('
+      puts "\n=> All busted, no winner :("
     elsif one_player_left?(players)
       print_winner(players.last)
     elsif top_players_tied?(players)
-      tie_breaker(players)
-    else
-      print_winner(players.last)
+      if Blackjack.tie_breaker(players)
+        print_winner(Blackjack.tie_breaker(players))
+      else
+        puts "\n=> It's a Draw!"
+      end
     end
   end
 

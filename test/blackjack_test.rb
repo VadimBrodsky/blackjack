@@ -148,4 +148,65 @@ class GameTest < Minitest::Test
     p.update_status
     assert_equal p.status, :bust
   end
+
+  def test_all_busted
+    @p1 = Player.new('P1')
+    @p1.hit(Card.new('queen', 'hearts'))
+    @p1.hit(Card.new('king', 'spades'))
+    @p1.hit(Card.new('jack', 'clubs'))
+
+    @p2 = Player.new('P2')
+    @p2.hit(Card.new('queen', 'hearts'))
+    @p2.hit(Card.new('9', 'clubs'))
+    @p2.hit(Card.new('7', 'spades'))
+    assert_equal Blackjack.remove_busted_players!([@p1, @p2]), []
+  end
+
+  def test_value_of_highest_hand
+    @p1 = Player.new('Top Player')
+    @p1.hit(Card.new('queen', 'hearts'))
+    @p1.hit(Card.new('king', 'spades'))
+
+    @p2 = Player.new('Bottom Player')
+    @p2.hit(Card.new('queen', 'hearts'))
+    @p2.hit(Card.new('9', 'clubs'))
+
+    assert_equal Blackjack.highest_value([@p1, @p2]), 20
+  end
+
+  def test_players_tied_value
+    @p1 = Player.new('P1')
+    @p1.hit(Card.new('queen', 'hearts'))
+    @p1.hit(Card.new('king', 'spades'))
+
+    @p2 = Player.new('P2')
+    @p2.hit(Card.new('queen', 'clubs'))
+    @p2.hit(Card.new('5', 'clubs'))
+    @p2.hit(Card.new('5', 'spades'))
+
+    @p3 = Player.new('P3')
+    @p3.hit(Card.new('queen', 'clubs'))
+    @p3.hit(Card.new('5', 'clubs'))
+
+    refute_equal Blackjack.top_players([@p1, @p2, @p3]), [@p1, @p2, @p3]
+    assert_equal Blackjack.top_players([@p1, @p2, @p3]), [@p1, @p2]
+  end
+
+  def test_tie_breaker_winner
+    @p1 = Player.new('P1')
+    @p1.hit(Card.new('queen', 'hearts'))
+    @p1.hit(Card.new('king', 'spades'))
+
+    @p2 = Player.new('P2')
+    @p2.hit(Card.new('queen', 'clubs'))
+    @p2.hit(Card.new('5', 'clubs'))
+    @p2.hit(Card.new('5', 'spades'))
+
+    @p3 = Player.new('P3')
+    @p3.hit(Card.new('queen', 'clubs'))
+    @p3.hit(Card.new('5', 'clubs'))
+
+    assert_equal Blackjack.tie_breaker([@p1, @p2, @p3]), @p2
+    assert_nil Blackjack.tie_breaker([@p1, @p1])
+  end
 end
